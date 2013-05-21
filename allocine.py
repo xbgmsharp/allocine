@@ -8,6 +8,11 @@ Base on work from https://github.com/gromez/allocine-api
 Sample code:
 
     from allocine import allocine
+    api = allocine('100043982026','29d185d98c984a359e6e6f26a0474269')
+    movie = api.get(27405)
+    search = api.search("Oblivion")
+or
+    from allocine import allocine
     api = allocine()
     api.configure('100043982026','29d185d98c984a359e6e6f26a0474269')
     movie = api.get(27405)
@@ -15,7 +20,7 @@ Sample code:
 
 """
 # Debug
-from pprint import pprint
+#from pprint import pprint
 # standard module
 from datetime import date
 import urllib2, urllib
@@ -27,10 +32,8 @@ __author__ = "Francois Lacroix"
 __license__ = "GPL"
 __description__ = "A module to use Allocine API V3 in Python"
 
-class allocine():
-    """
-    Represents an API connection.
-    """
+class allocine(object):
+    """ allocine, used to call Allocine API. """
     def __init__(self, partner_key=None, secret_key=None):
         """Init values"""
         self._api_url = 'http://api.allocine.fr/rest/v3'
@@ -69,7 +72,7 @@ class allocine():
         return response;
     
     def search(self, query):
-        """Generate the search query"""
+        """Search for a movie"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
@@ -83,7 +86,7 @@ class allocine():
         return response;
 
     def get(self, id):
-        """Generate the get by id query"""
+        """Get the movie details by ID"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
@@ -95,5 +98,50 @@ class allocine():
 
         # do the request
         response = self._do_request('movie', params);
+
+        return response;
+
+    def tvseries(self, id):
+        """Get the TVshow details by ID"""
+        # build the params
+        params = {}
+        params['partner'] = self._partner_key
+        params['code'] = id
+        params['profile'] = 'large'
+        params['striptags'] = 'synopsis,synopsisshort'
+        params['format'] = 'json'
+
+        # do the request
+        response = self._do_request('tvseries', params);
+
+        return response;
+
+    def season(self, id):
+        """Get the season details by ID"""
+        # build the params
+        params = {}
+        params['partner'] = self._partner_key
+        params['code'] = id
+        params['profile'] = 'large'
+        params['striptags'] = 'synopsis,synopsisshort'
+        params['format'] = 'json'
+
+        # do the request
+        response = self._do_request('season', params);
+
+        return response;
+
+    def episode(self, id):
+        """Get the episode details by ID"""
+        # build the params
+        params = {}
+        params['partner'] = self._partner_key
+        params['code'] = id
+        params['profile'] = 'large'
+        params['striptags'] = 'synopsis,synopsisshort'
+        params['format'] = 'json'
+
+        # do the request
+        response = self._do_request('season', params);
 
         return response;
