@@ -9,7 +9,7 @@ serie = api.tvseries(223)
 print "Serie Title [{0}]".format(serie['tvseries']['originalTitle'])
 
 season = api.season(12277)
-print "Season [{0}]".format(season['season']['seasonNumber'])
+print "Season Number [{0}]".format(season['season']['seasonNumber'])
 
-serie = api.episode(247699)
-print serie
+episode = api.episode(247699)
+print "Episode Number [{0}] Title [{1}]".format(episode['episode']['episodeNumberSeason'], episode['episode']['originalTitle'])

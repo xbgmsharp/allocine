@@ -71,28 +71,28 @@ class allocine(object):
         #pprint(response)
         return response;
     
-    def search(self, query):
-        """Search for a movie"""
+    def search(self, query, filter="movie"):
+        """Search for"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
         params['q'] = query
         params['format'] = 'json'
-        params['filter'] = 'movie'
+        params['filter'] = filter
 
         # do the request
         response = self._do_request('search', params);
 
         return response;
 
-    def get(self, id):
+    def get(self, id, filter="movie", profile="large"):
         """Get the movie details by ID"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
         params['code'] = id
-        params['profile'] = 'large'
-        params['filter'] = 'movie'
+        params['profile'] = profile
+        params['filter'] = filter
         params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
 
@@ -101,13 +101,13 @@ class allocine(object):
 
         return response;
 
-    def tvseries(self, id):
+    def tvseries(self, id, profile="large"):
         """Get the TVshow details by ID"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
         params['code'] = id
-        params['profile'] = 'large'
+        params['profile'] = profile
         params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
 
@@ -116,13 +116,13 @@ class allocine(object):
 
         return response;
 
-    def season(self, id):
+    def season(self, id, profile="large"):
         """Get the season details by ID"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
         params['code'] = id
-        params['profile'] = 'large'
+        params['profile'] = profile
         params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
 
@@ -131,17 +131,17 @@ class allocine(object):
 
         return response;
 
-    def episode(self, id):
+    def episode(self, id, profile="large"):
         """Get the episode details by ID"""
         # build the params
         params = {}
         params['partner'] = self._partner_key
         params['code'] = id
-        params['profile'] = 'large'
+        params['profile'] = profile
         params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
 
         # do the request
-        response = self._do_request('season', params);
+        response = self._do_request('episode', params);
 
         return response;
