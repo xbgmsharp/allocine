@@ -2,20 +2,21 @@
 #-*- coding:utf-8 -*-
 """
 A module to use Allocine API V3 in Python
-https://github.com/xbgmsharp/allocine
-Base on work from https://github.com/gromez/allocine-api
+Repository: https://github.com/xbgmsharp/allocine
+Base on work from: https://github.com/gromez/allocine-api
+License: LGPLv2 http://www.gnu.org/licenses/lgpl.html
 
 Sample code:
 
     from allocine import allocine
     api = allocine('100043982026','29d185d98c984a359e6e6f26a0474269')
-    movie = api.get(27405)
+    movie = api.movie(27405)
     search = api.search("Oblivion")
 or
     from allocine import allocine
     api = allocine()
     api.configure('100043982026','29d185d98c984a359e6e6f26a0474269')
-    movie = api.get(27405)
+    movie = api.movie(27405)
     search = api.search("Oblivion")
 
 """
@@ -27,23 +28,23 @@ import urllib2, urllib
 import hashlib, base64
 import simplejson
 
-__version__ = "0.1"
+__version__ = "0.2"
 __author__ = "Francois Lacroix"
 __license__ = "GPL"
 __description__ = "A module to use Allocine API V3 in Python"
 
 class allocine(object):
-    """ allocine, used to call Allocine API. """
+    """An interface to the Allocine API"""
     def __init__(self, partner_key=None, secret_key=None):
         """Init values"""
         self._api_url = 'http://api.allocine.fr/rest/v3'
-        self._partner_key  = partner_key
+        self._partner_key  = 'aXBob25lLXYy'
         self._secret_key = secret_key
-        self._user_agent = 'Dalvik/1.6.0 (Linux; U; Android 4.2.2; Nexus 4 Build/JDQ39E)'
+        self._user_agent = 'AlloCine/2.9.5 CFNetwork/548.1.4 Darwin/11.0.0'
 
     def configure(self, partner_key=None, secret_key=None):
         """Set the keys"""
-        self._partner_key = partner_key
+        self._partner_key = 'aXBob25lLXYy'
         self._secret_key = secret_key
 
     def _do_request(self, method=None, params=None):
@@ -60,24 +61,29 @@ class allocine(object):
         b64 = base64.b64encode(sha1)
         #print b64
         sig = urllib2.quote(b64)
-        query_url += '?'+urllib.urlencode(params)+'&sed='+sed+'&sig='+sig
+        #query_url += '?'+urllib.urlencode(params)+'&sed='+sed+'&sig='+sig
+        query_url += '?'+urllib.urlencode(params, True)
         #print query_url;
 
         # do the request
-        opener = urllib2.build_opener()
-        opener.addheaders = [('User-agent', self._user_agent)]
-        
-        response = simplejson.load(opener.open(query_url, timeout = 10))
-        #pprint(response)
+        req = urllib2.Request(query_url)
+        req.add_header('User-agent', self._user_agent)
+
+        response = simplejson.load(urllib2.urlopen(req, timeout = 10))
+
         return response;
     
     def search(self, query, filter="movie"):
-        """Search for"""
+        """Search for a term
+        Attributes:
+            query -- Term to search for
+            filter -- Filter by resut type (movie, theater, person, news, tvseries)
+        """
         # build the params
         params = {}
+        params['format'] = 'json'
         params['partner'] = self._partner_key
         params['q'] = query
-        params['format'] = 'json'
         params['filter'] = filter
 
         # do the request
@@ -85,16 +91,20 @@ class allocine(object):
 
         return response;
 
-    def get(self, id, filter="movie", profile="large"):
-        """Get the movie details by ID"""
+    def movie(self, id, profile="large"):
+        """Get the movie details by ID
+        Attributes:
+            id -- ID of the movie your search for
+            profile -- Level of details to return (small, medium, large)
+        """
         # build the params
         params = {}
-        params['partner'] = self._partner_key
-        params['code'] = id
-        params['profile'] = profile
-        params['filter'] = filter
-        params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
+        params['partner'] = self._partner_key
+        params['mediafmt'] = 'mp4-lc:m'
+        params['profile'] = profile
+        params['code'] = id
+        params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
         response = self._do_request('movie', params);
@@ -102,14 +112,19 @@ class allocine(object):
         return response;
 
     def tvseries(self, id, profile="large"):
-        """Get the TVshow details by ID"""
+        """Get the TVshow details by ID
+        Attributes:
+            id -- ID of the movie your search for
+            profile -- Level of details to return (small, medium, large)
+        """
         # build the params
         params = {}
-        params['partner'] = self._partner_key
-        params['code'] = id
-        params['profile'] = profile
-        params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
+        params['partner'] = self._partner_key
+        params['mediafmt'] = 'mp4-lc:m'
+        params['profile'] = profile
+        params['code'] = id
+        params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
         response = self._do_request('tvseries', params);
@@ -117,14 +132,18 @@ class allocine(object):
         return response;
 
     def season(self, id, profile="large"):
-        """Get the season details by ID"""
+        """Get the season details by ID
+        Attributes:
+            id -- ID of the movie your search for
+            profile -- Level of details to return (small, medium, large)
+        """
         # build the params
         params = {}
-        params['partner'] = self._partner_key
-        params['code'] = id
-        params['profile'] = profile
-        params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
+        params['partner'] = self._partner_key
+        params['profile'] = profile
+        params['code'] = id
+        params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
         response = self._do_request('season', params);
@@ -132,14 +151,18 @@ class allocine(object):
         return response;
 
     def episode(self, id, profile="large"):
-        """Get the episode details by ID"""
+        """Get the episode details by ID
+        Attributes:
+            id -- ID of the movie your search for
+            profile -- Level of details to return (small, medium, large)
+        """
         # build the params
         params = {}
-        params['partner'] = self._partner_key
-        params['code'] = id
-        params['profile'] = profile
-        params['striptags'] = 'synopsis,synopsisshort'
         params['format'] = 'json'
+        params['partner'] = self._partner_key
+        params['profile'] = profile
+        params['code'] = id
+        params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
         response = self._do_request('episode', params);
