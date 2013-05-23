@@ -9,11 +9,6 @@ License: LGPLv2 http://www.gnu.org/licenses/lgpl.html
 Sample code:
 
     from allocine import allocine
-    api = allocine('100043982026','29d185d98c984a359e6e6f26a0474269')
-    movie = api.movie(27405)
-    search = api.search("Oblivion")
-or
-    from allocine import allocine
     api = allocine()
     api.configure('100043982026','29d185d98c984a359e6e6f26a0474269')
     movie = api.movie(27405)
@@ -75,7 +70,7 @@ class allocine(object):
     
     def search(self, query, filter="movie"):
         """Search for a term
-        Attributes:
+        Param:
             query -- Term to search for
             filter -- Filter by resut type (movie, theater, person, news, tvseries)
         """
@@ -91,17 +86,18 @@ class allocine(object):
 
         return response;
 
-    def movie(self, id, profile="large"):
+    def movie(self, id, profile="large", mediafmt="mp4-lc:m"):
         """Get the movie details by ID
-        Attributes:
-            id -- ID of the movie your search for
+        Param:
+            id -- Unique ID of the movie your search for
             profile -- Level of details to return (small, medium, large)
+            mediafmt -- The media format (flv, mp4-lc, mp4-hip, mp4-archive, mpeg2-theater, mpeg2)
         """
         # build the params
         params = {}
         params['format'] = 'json'
         params['partner'] = self._partner_key
-        params['mediafmt'] = 'mp4-lc:m'
+        params['mediafmt'] = mediafmt
         params['profile'] = profile
         params['code'] = id
         params['striptags'] = 'synopsis,synopsisshort'
@@ -111,17 +107,18 @@ class allocine(object):
 
         return response;
 
-    def tvseries(self, id, profile="large"):
+    def tvseries(self, id, profile="large", mediafmt="mp4-lc:m"):
         """Get the TVshow details by ID
-        Attributes:
-            id -- ID of the movie your search for
+        Param:
+            id -- Unique ID of the tvseries your search for
             profile -- Level of details to return (small, medium, large)
+            mediafmt -- The media format (flv, mp4-lc, mp4-hip, mp4-archive, mpeg2-theater, mpeg2)
         """
         # build the params
         params = {}
         params['format'] = 'json'
         params['partner'] = self._partner_key
-        params['mediafmt'] = 'mp4-lc:m'
+        params['mediafmt'] = mediafmt
         params['profile'] = profile
         params['code'] = id
         params['striptags'] = 'synopsis,synopsisshort'
@@ -133,8 +130,8 @@ class allocine(object):
 
     def season(self, id, profile="large"):
         """Get the season details by ID
-        Attributes:
-            id -- ID of the movie your search for
+        Param:
+            id -- Unique ID of the season your search for
             profile -- Level of details to return (small, medium, large)
         """
         # build the params
@@ -152,8 +149,8 @@ class allocine(object):
 
     def episode(self, id, profile="large"):
         """Get the episode details by ID
-        Attributes:
-            id -- ID of the movie your search for
+        Param:
+            id -- Unique ID of the episode your search for
             profile -- Level of details to return (small, medium, large)
         """
         # build the params
