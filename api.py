@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #-*- coding:utf-8 -*-
 """
 A module to use Allocine API V3 in Python
@@ -30,16 +30,16 @@ __description__ = "A module to use Allocine API V3 in Python"
 
 class allocine(object):
     """An interface to the Allocine API"""
-    def __init__(self, partner_key=None, secret_key=None):
+    def __init__(self, partner_key='aXBob25lLXYy', secret_key='29d185d98c984a359e6e6f26a0474269'):
         """Init values"""
         self._api_url = 'http://api.allocine.fr/rest/v3'
-        self._partner_key  = 'aXBob25lLXYy'
+        self._partner_key  = partner_key
         self._secret_key = secret_key
         self._user_agent = 'AlloCine/2.9.5 CFNetwork/548.1.4 Darwin/11.0.0'
 
     def configure(self, partner_key=None, secret_key=None):
         """Set the keys"""
-        self._partner_key = 'aXBob25lLXYy'
+        self._partner_key = partner_key
         self._secret_key = secret_key
 
     def _do_request(self, method=None, params=None):
