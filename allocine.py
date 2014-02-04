@@ -19,9 +19,9 @@ Sample code:
 #from pprint import pprint
 # standard module
 from datetime import date
-import urllib2, urllib
+import urllib.request, urllib.error, urllib.parse, urllib.request, urllib.parse, urllib.error
 import hashlib, base64
-import simplejson
+import json
 
 __version__ = "0.2"
 __author__ = "Francois Lacroix"
@@ -51,20 +51,22 @@ class allocine(object):
         today = date.today()
         sed = today.strftime('%Y%m%d')
         #print sed
-        sha1 = hashlib.sha1(self._secret_key+urllib.urlencode(params)+'&sed='+sed).digest()
+        to_hash = (self._secret_key + urllib.parse.urlencode(params) + '&sed=' + sed).encode("utf8")
+        sha1 = hashlib.sha1(to_hash).digest()
         #print sha1
         b64 = base64.b64encode(sha1)
         #print b64
-        sig = urllib2.quote(b64)
+        sig = urllib.parse.quote(b64)
         #query_url += '?'+urllib.urlencode(params)+'&sed='+sed+'&sig='+sig
-        query_url += '?'+urllib.urlencode(params, True)
+        query_url += '?'+urllib.parse.urlencode(params, True)
         #print query_url;
 
         # do the request
-        req = urllib2.Request(query_url)
+        req = urllib.request.Request(query_url)
         req.add_header('User-agent', self._user_agent)
 
-        response = simplejson.load(urllib2.urlopen(req, timeout = 10))
+        str_response = urllib.request.urlopen(req, timeout = 10).readall().decode("utf-8")
+        response = json.loads(str_response)
 
         return response;
     
