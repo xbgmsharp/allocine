@@ -35,7 +35,7 @@ class allocine(object):
         self._api_url = 'http://api.allocine.fr/rest/v3'
         self._partner_key  = partner_key
         self._secret_key = secret_key
-        self._user_agent = 'AlloCine/2.9.5 CFNetwork/548.1.4 Darwin/11.0.0'
+        self._user_agent = 'Mozilla/5.0 (Linux; U; Android 1.9; en-gb) AppleWebKit/999+ (KHTML, like Gecko) Safari/999.9'
 
     def configure(self, partner_key=None, secret_key=None):
         """Set the keys"""
@@ -57,19 +57,19 @@ class allocine(object):
         b64 = base64.b64encode(sha1)
         #print b64
         sig = urllib.parse.quote(b64)
-        #query_url += '?'+urllib.urlencode(params)+'&sed='+sed+'&sig='+sig
-        query_url += '?'+urllib.parse.urlencode(params, True)
+        query_url += '?'+urllib.parse.urlencode(params, True)+'&sed='+sed+'&sig='+sig
+        #query_url += '?'+urllib.parse.urlencode(params, True)
         #print query_url;
 
         # do the request
         req = urllib.request.Request(query_url)
         req.add_header('User-agent', self._user_agent)
 
-        str_response = urllib.request.urlopen(req, timeout = 10).readall().decode("utf-8")
+        str_response = urllib.request.urlopen(req, timeout = 10).readline().decode("utf-8")
         response = json.loads(str_response)
 
         return response;
-    
+
     def search(self, query, filter="movie"):
         """Search for a term
         Param:
