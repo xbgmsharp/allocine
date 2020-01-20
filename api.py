@@ -20,7 +20,7 @@ Sample code:
 # standard module
 from datetime import date
 import random, time
-import urllib.request, urllib.error, urllib.parse, urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse, urllib.request, urllib.parse
 import hashlib, base64
 import json
 
@@ -79,7 +79,7 @@ class allocine(object):
         response = None
 
         # build the URL
-        query_url = self._api_url+'/'+method;
+        query_url = self._api_url+'/'+method
 
         # new algo to build the query
         today = date.today()
@@ -92,7 +92,7 @@ class allocine(object):
         #print(b64)
         sig = urllib.parse.quote(b64)
         query_url += '?'+urllib.parse.urlencode(params, True)+'&sed='+sed+'&sig='+sig
-        #print(query_url);
+        #print(query_url)
 
         triesmax = 10
         tries = 1
@@ -114,7 +114,7 @@ class allocine(object):
                 else:
                     tries = triesmax
 
-        return response;
+        return response
 
     def search(self, query, filter="movie"):
         """Search for a term
@@ -130,9 +130,9 @@ class allocine(object):
         params['filter'] = filter
 
         # do the request
-        response = self._do_request('search', params);
+        response = self._do_request('search', params)
 
-        return response;
+        return response
 
     def movie(self, id, profile="large", mediafmt="mp4-lc:m"):
         """Get the movie details by ID
@@ -151,9 +151,9 @@ class allocine(object):
         params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
-        response = self._do_request('movie', params);
+        response = self._do_request('movie', params)
 
-        return response;
+        return response
 
     def tvseries(self, id, profile="large", mediafmt="mp4-lc:m"):
         """Get the TVshow details by ID
@@ -172,9 +172,9 @@ class allocine(object):
         params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
-        response = self._do_request('tvseries', params);
+        response = self._do_request('tvseries', params)
 
-        return response;
+        return response
 
     def season(self, id, profile="large"):
         """Get the season details by ID
@@ -191,9 +191,9 @@ class allocine(object):
         params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
-        response = self._do_request('season', params);
+        response = self._do_request('season', params)
 
-        return response;
+        return response
 
     def episode(self, id, profile="large"):
         """Get the episode details by ID
@@ -210,6 +210,6 @@ class allocine(object):
         params['striptags'] = 'synopsis,synopsisshort'
 
         # do the request
-        response = self._do_request('episode', params);
+        response = self._do_request('episode', params)
 
-        return response;
+        return response
