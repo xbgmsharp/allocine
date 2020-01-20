@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pprint
 from allocine import allocine
 
