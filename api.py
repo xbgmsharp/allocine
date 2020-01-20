@@ -58,15 +58,27 @@ class allocine(object):
         #print b64
         sig = urllib.parse.quote(b64)
         query_url += '?'+urllib.parse.urlencode(params, True)+'&sed='+sed+'&sig='+sig
-        #query_url += '?'+urllib.parse.urlencode(params, True)
         #print query_url;
 
-        # do the request
-        req = urllib.request.Request(query_url)
-        req.add_header('User-agent', self._user_agent)
+        triesmax = 10
+        tries = 1
+        ok = False
+        while not ok and tries < triesmax:
+            try:
+                # do the request
+                req = urllib.request.Request(query_url)
+                req.add_header('User-agent', self._user_agent)
 
-        str_response = urllib.request.urlopen(req, timeout = 10).readline().decode("utf-8")
-        response = json.loads(str_response)
+                str_response = urllib.request.urlopen(req, timeout = 10).readline().decode("utf-8")
+                response = json.loads(str_response)
+                ok = True
+            except urllib.request.HTTPError as e:
+                #print(e)
+                if e.code == 403:
+                    tries += 1
+                    time.sleep(1)
+                else:
+                    tries = triesmax
 
         return response;
 
