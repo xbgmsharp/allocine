@@ -84,15 +84,15 @@ class allocine(object):
         # new algo to build the query
         today = date.today()
         sed = today.strftime('%Y%m%d')
-        #print(sed)
-        to_hash = (self._secret_key + urllib.parse.urlencode(params) + '&sed=' + sed).encode("utf8")
+        # print(sed)
+        params['sed'] = sed
+        to_hash = (method + urllib.parse.urlencode(params) + self._secret_key).encode("utf8")
         sha1 = hashlib.sha1(to_hash).digest()
-        #print(sha1)
+        # print(sha1)
         b64 = base64.b64encode(sha1)
-        #print(b64)
-        sig = urllib.parse.quote(b64)
-        query_url += '?'+urllib.parse.urlencode(params, True)+'&sed='+sed+'&sig='+sig
-        #print(query_url)
+        # print(b64)
+        params['sig'] = b64
+        query_url += '?' + urllib.parse.urlencode(params, True)
 
         triesmax = 10
         tries = 1
