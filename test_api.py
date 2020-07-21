@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import pprint
-from allocine import allocine
+from api import allocine
 
 api = allocine()
-api.configure('100043982026','29d185d98c984a359e6e6f26a0474269')
+api.configure('100ED1DA33EB','1a1ed8c1bed24d60ae3472eed1da33eb')
 
 search = api.search("Fight club", "movie")
 print("Search result Count [{0}] Code [{1}] Title [{2}]".format(search['feed']['totalResults'],
